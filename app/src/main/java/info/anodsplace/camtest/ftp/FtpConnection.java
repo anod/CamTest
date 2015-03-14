@@ -21,7 +21,7 @@ public class FtpConnection {
     private FtpSettings mSettings;
 
     public FtpConnection() {
-        ftp = new FTPClient();
+
     }
 
     public boolean connect() {
@@ -67,8 +67,12 @@ public class FtpConnection {
             }
             Log.e("FTPQueue", "Could not logout from server.");
         }
+        ftp = null;
     }
     private void doConnect(FtpSettings settings) throws IOException {
+        if (ftp == null) {
+            ftp = new FTPClient();
+        }
         ftp.connect(settings.getHost(), settings.getPort());
 
         Log.d("FTPQueue", "Connected to " + settings.toString());
@@ -95,13 +99,14 @@ public class FtpConnection {
     }
 
     public boolean upload(FtpRequest request) throws IOException {
-        if (!ftp.isConnected()) {
+        if (ftp == null || !ftp.isConnected()) {
             doConnect(mSettings);
             ftp.makeDirectory("CamTest");
             ftp.changeWorkingDirectory(UPLOAD_DIR);
         }
         InputStream input;
 
+        Log.d("FTPQueue", "Uploading " + request);
         input = new FileInputStream(request.getLocal());
 
         boolean result = ftp.storeFile(request.getRemoteName(), input);

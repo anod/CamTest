@@ -87,6 +87,13 @@ public class FtpQueue {
                 mDispatchers[i].quit();
             }
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mConnection.disconnect();
+            }
+        }).start();
     }
 
 
@@ -97,12 +104,4 @@ public class FtpQueue {
         return mSequenceGenerator.incrementAndGet();
     }
 
-    public void disconnect() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mConnection.disconnect();
-            }
-        }).start();
-    }
 }

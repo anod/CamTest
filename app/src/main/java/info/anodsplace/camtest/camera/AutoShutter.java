@@ -13,12 +13,12 @@ import java.io.File;
  */
 public class AutoShutter implements CameraHost.Listener {
     private static final String TAG = "AutoShutter";
-    public static final int DELAY_MILLIS = 300;
+    public static final int DELAY_MILLIS = 3000;
     private Handler mHandler = null;
     private int mCounter = 0;
     private final Activity mActivity;
     private final Listener mListener;
-    private boolean mStopped = false;
+    private boolean mStopped = true;
     private boolean mPreviewStarted;
 
     public interface Listener {
@@ -38,13 +38,21 @@ public class AutoShutter implements CameraHost.Listener {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e(TAG, "takePicture");
-                    takePicture();
+                takePicture();
                 }
             });
 
         }
     };
+
+    public void toggle() {
+        if (mStopped) {
+            start();
+        } else {
+            stop();
+        }
+    }
+
 
     public void start() {
         Log.e(TAG, "start");
@@ -68,6 +76,7 @@ public class AutoShutter implements CameraHost.Listener {
         if (mStopped) {
             return;
         }
+        Log.e(TAG, "takePicture");
         if (mPreviewStarted) {
             mListener.takePicture();
         } else {
