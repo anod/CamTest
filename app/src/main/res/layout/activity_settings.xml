@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <info.anodsplace.camtest.views.FtpSettingsView
+        android:id="@+id/ftpSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        </info.anodsplace.camtest.views.FtpSettingsView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="GCM Registration Id"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/regId"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share_grey600_36dp"
+        android:id="@+id/shareRegId"
+        android:layout_gravity="right"/>
+
+</LinearLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+    >
+    <fragment
+        android:id="@+id/camera_preview"
+        android:name="info.anodsplace.camtest.fragments.CameraFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right"
+        android:padding="8dp"
+        android:background="#cc000000">
+
+        <ImageButton
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:src="@drawable/ic_settings_grey600_36dp"
+            android:background="@android:color/transparent"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Small"
+                android:layout_gravity="center_horizontal"
+                android:text="Pic."
+                android:textColor="@android:color/holo_red_dark"
+                />
+            <TextView
+                android:id="@+id/txt_taken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_gravity="center_horizontal"
+                android:text="999"
+                android:textColor="@android:color/holo_red_dark"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Small"
+                android:layout_gravity="center_horizontal"
+                android:text="\u2191Up"
+                android:textColor="@android:color/holo_green_dark"
+                />
+
+            <TextView
+                android:id="@+id/txt_uploaded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Medium"
+                android:gravity="bottom|center_horizontal"
+                android:text="999"
+                android:textColor="@android:color/holo_green_dark"
+                />
+
+
+            </LinearLayout>
+
+    </FrameLayout>
+</FrameLayout>

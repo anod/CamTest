@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="FTP Server"
+        android:id="@+id/textView"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ftp_ip"
+            android:layout_gravity="center_horizontal"
+            android:hint="IP address"
+            android:inputType="textPhonetic"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ftp_port"
+            android:inputType="numberSigned"
+            android:hint="Port"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ftp_uname"
+        android:layout_gravity="center_horizontal"
+        android:inputType="textPersonName"
+        android:hint="Username"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ftp_pass"
+        android:inputType="textPassword"
+        android:hint="Password"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/ftp_save"/>
+
+</merge>
