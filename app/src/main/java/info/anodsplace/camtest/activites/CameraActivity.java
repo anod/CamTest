@@ -85,6 +85,8 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
         boolean ftpInitilized = !TextUtils.isEmpty(FtpSettingsStorage.load(this).ip);
         if (reg.getRegistrationId() == null || !ftpInitilized) {
             startActivity(new Intent(this, SettingsActivity.class));
+            finish();
+            return;
         }
     }
 
