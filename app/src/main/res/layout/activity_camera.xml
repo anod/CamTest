@@ -81,4 +81,16 @@
             </LinearLayout>
 
     </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.0/0.0 mb (0%)"
+        android:id="@+id/txt_upload_progress"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:textColor="@android:color/holo_green_dark"
+        android:background="#cc000000"/>
 </FrameLayout>

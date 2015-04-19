@@ -30,3 +30,5 @@ proguard/
 /local.properties
 *.hprof
 
+
+*.iml

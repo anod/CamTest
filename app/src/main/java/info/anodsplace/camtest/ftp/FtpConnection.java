@@ -6,9 +6,13 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import info.anodsplace.camtest.utils.ProgressInputStream;
 
 /**
  * @author alex
@@ -17,11 +21,13 @@ import java.io.InputStream;
 
 public class FtpConnection {
     public static final String UPLOAD_DIR = "CamTest";
+    private final ProgressInputStream.Listener mListener;
     private FTPClient ftp;
     private FtpSettings mSettings;
 
-    public FtpConnection() {
 
+    public FtpConnection(ProgressInputStream.Listener listener) {
+        mListener = listener;
     }
 
     public boolean connect() {
@@ -104,14 +110,17 @@ public class FtpConnection {
             ftp.makeDirectory("CamTest");
             ftp.changeWorkingDirectory(UPLOAD_DIR);
         }
-        InputStream input;
 
         Log.d("FTPQueue", "Uploading " + request);
-        input = new FileInputStream(request.getLocal());
+        File file = new File(request.getLocal());
+        BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(file));
+        Log.d("FtpConnection", String.format("File size: %.2f mb",(float)file.length()/1000000));
+        ProgressInputStream progressInput = new ProgressInputStream(buffIn, file.length(), mListener);
 
-        boolean result = ftp.storeFile(request.getRemoteName(), input);
+        ftp.enterLocalPassiveMode();
+        boolean result = ftp.storeFile(request.getRemoteName(), progressInput);
 
-        input.close();
+        buffIn.close();
 
         if (!result) {
             throw new IOException("Cannot upload "+request);
@@ -123,4 +132,5 @@ public class FtpConnection {
     public void setSettings(FtpSettings settings) {
         mSettings = settings;
     }
+
 }

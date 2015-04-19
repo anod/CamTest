@@ -25,6 +25,7 @@ import info.anodsplace.camtest.ftp.FtpSettings;
 import info.anodsplace.camtest.ftp.FtpSettingsStorage;
 import info.anodsplace.camtest.gcm.GcmRegistration;
 import info.anodsplace.camtest.R;
+import info.anodsplace.camtest.utils.ProgressInputStream;
 import info.anodsplace.camtest.views.FtpSettingsView;
 
 
@@ -155,8 +156,7 @@ public class SettingsActivity extends Activity implements GcmRegistration.Listen
 
     }
 
-    private static class FtpSettingsTask extends AsyncTask<FtpSettings, Integer, Boolean>
-    {
+    private static class FtpSettingsTask extends AsyncTask<FtpSettings, Integer, Boolean> implements ProgressInputStream.Listener {
         private Context mContext;
 
         private FtpSettingsTask(Context context) {
@@ -166,7 +166,7 @@ public class SettingsActivity extends Activity implements GcmRegistration.Listen
         @Override
         protected Boolean doInBackground(FtpSettings... params) {
             FtpSettings settings = params[0];
-            FtpConnection connection = new FtpConnection();
+            FtpConnection connection = new FtpConnection(this);
             connection.setSettings(settings);
             boolean res = connection.connect();
             connection.disconnect();
@@ -176,6 +176,11 @@ public class SettingsActivity extends Activity implements GcmRegistration.Listen
         @Override
         protected void onPostExecute(Boolean success) {
             Toast.makeText(mContext, (success) ? "Ftp settings are valid" : "Cannot connect to the FTP server", Toast.LENGTH_SHORT ).show();
+        }
+
+        @Override
+        public void onProgress(long progress, long size) {
+
         }
     }
 }

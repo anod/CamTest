@@ -1,9 +1,7 @@
 package info.anodsplace.camtest.activites;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,15 +26,15 @@ import info.anodsplace.camtest.ftp.FtpDelivery;
 import info.anodsplace.camtest.ftp.FtpError;
 import info.anodsplace.camtest.ftp.FtpQueue;
 import info.anodsplace.camtest.ftp.FtpRequest;
-import info.anodsplace.camtest.ftp.FtpSettings;
 import info.anodsplace.camtest.ftp.FtpSettingsStorage;
 import info.anodsplace.camtest.gcm.GcmRegistration;
+import info.anodsplace.camtest.utils.ProgressInputStream;
 
 /**
  * @author alex
  * @date 2015-03-07
  */
-public class CameraActivity extends Activity implements FtpDelivery, AutoShutter.Listener  {
+public class CameraActivity extends Activity implements FtpDelivery, AutoShutter.Listener, ProgressInputStream.Listener {
     private static final String TAG = "CameraActivity";
 
     @InjectView(R.id.btn_settings)
@@ -47,6 +45,8 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
     TextView mUploadedCounterView;
     @InjectView(R.id.btn_start)
     ImageButton mToggleButton;
+    @InjectView(R.id.txt_upload_progress)
+    TextView mProgressTextView;
 
     private FtpQueue mFtpQueue;
     private int mUploaded;
@@ -61,7 +61,7 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
 
         ButterKnife.inject(this);
 
-        Log.e(TAG,"onCreate");
+        Log.e(TAG, "onCreate");
 
         mPicCounterView.setText("0");
         mUploadedCounterView.setText(mUploaded+"");
@@ -74,6 +74,7 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
         });
 
 
+        mProgressTextView.setVisibility(View.GONE);
         mToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +93,7 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
 
     @Override
     protected void onResume() {
-        FtpConnection connection = new FtpConnection();
+        FtpConnection connection = new FtpConnection(this);
         connection.setSettings(FtpSettingsStorage.load(this));
         mFtpQueue = new FtpQueue(connection, 1, this);
         mFtpQueue.start();
@@ -112,6 +113,7 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
     }
 
     public void addToFtpQueue(File file) {
+        mProgressTextView.setVisibility(View.VISIBLE);
         FtpRequest req = new FtpRequest(file.getAbsolutePath(), file.getName());
         Log.i(TAG, "Add to FTP queue: "+req.toString());
         mFtpQueue.add(req);
@@ -162,5 +164,19 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
     public void onImageTaken(int num, File file) {
         setImageCounter(num);
         addToFtpQueue(file);
+    }
+
+    @Override
+    public void onProgress(long progress, long size) {
+        final float progressMb = (float) progress / 1000000;
+        final float sizeMb = (float) size / 1000000;
+        final long percentage = (progress * 100)/size;
+        final String text = String.format("%.1f/%.1f mb (%d%%)",progressMb,sizeMb,percentage);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            mProgressTextView.setText(text);
+            }
+        });
     }
 }
