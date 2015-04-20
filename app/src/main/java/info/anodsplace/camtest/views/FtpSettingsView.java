@@ -60,7 +60,7 @@ public class FtpSettingsView extends LinearLayout {
         if (settings.port == 0) {
             mPortText.setText("");
         } else {
-            mPortText.setText(settings.port);
+            mPortText.setText(String.valueOf(settings.port));
         }
         mUnameText.setText(settings.username);
         mPassText.setText(settings.password);
