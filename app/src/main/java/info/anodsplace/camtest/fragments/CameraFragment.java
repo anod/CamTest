@@ -2,6 +2,9 @@ package info.anodsplace.camtest.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import info.anodsplace.camtest.activites.CameraActivity;
 
@@ -18,5 +21,11 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment{
         setHost(new info.anodsplace.camtest.camera.CameraHost(getActivity(), act.getCameraListener()));
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View cameraView = super.onCreateView(inflater, container, savedInstanceState);
 
+        return cameraView;
+    }
 }

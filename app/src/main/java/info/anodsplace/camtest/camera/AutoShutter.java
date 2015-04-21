@@ -13,7 +13,7 @@ import java.io.File;
  */
 public class AutoShutter implements CameraHost.Listener {
     private static final String TAG = "AutoShutter";
-    public static final int DELAY_MILLIS = 3000;
+    public static final int DELAY_MILLIS = 1000;
     private Handler mHandler = null;
     private int mCounter = 0;
     private final Activity mActivity;
@@ -21,9 +21,12 @@ public class AutoShutter implements CameraHost.Listener {
     private boolean mStopped = true;
     private boolean mPreviewStarted;
 
+
     public interface Listener {
         void takePicture();
         void onImageTaken(int num, File file);
+        void autoFocus();
+        void onAutoFocus(boolean success);
     }
 
     public AutoShutter(Activity activity, Listener listener) {
@@ -38,7 +41,7 @@ public class AutoShutter implements CameraHost.Listener {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                takePicture();
+                requestAutoFocus();
                 }
             });
 
@@ -72,6 +75,17 @@ public class AutoShutter implements CameraHost.Listener {
         }
     }
 
+
+    private void requestAutoFocus() {
+        if (mStopped) {
+            return;
+        }
+        Log.e(TAG, "requestAutoFocus");
+        if (mPreviewStarted) {
+            mListener.autoFocus();
+        }
+    }
+
     private void takePicture() {
         if (mStopped) {
             return;
@@ -81,6 +95,17 @@ public class AutoShutter implements CameraHost.Listener {
             mListener.takePicture();
         } else {
             schedule();
+        }
+    }
+
+    @Override
+    public void onAutoFocus(boolean success, Camera camera) {
+        Log.e(TAG,"onAutoFocus: "+success);
+        mListener.onAutoFocus(success);
+        if (success) {
+            takePicture();
+        } else {
+            requestAutoFocus();
         }
     }
 

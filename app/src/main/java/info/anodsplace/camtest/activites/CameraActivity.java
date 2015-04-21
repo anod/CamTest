@@ -52,6 +52,8 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
     private int mUploaded;
     private AutoShutter mShutter;
 
+    private CameraFragment mCameraFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,14 +158,39 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
 
     @Override
     public void takePicture() {
-        CameraFragment fragment = (CameraFragment) getFragmentManager().findFragmentById(R.id.camera_preview);
-        fragment.takePicture();
+        if (mCameraFragment == null) {
+            mCameraFragment = (CameraFragment) getFragmentManager()
+                    .findFragmentById(R.id.camera_preview);
+        }
+        mCameraFragment.takePicture();
     }
 
     @Override
     public void onImageTaken(int num, File file) {
         setImageCounter(num);
         addToFtpQueue(file);
+    }
+
+    @Override
+    public void autoFocus() {
+        if (mCameraFragment == null) {
+            mCameraFragment = (CameraFragment) getFragmentManager()
+                    .findFragmentById(R.id.camera_preview);
+        }
+        mCameraFragment.autoFocus();
+    }
+
+    @Override
+    public void onAutoFocus(boolean success) {
+        if (!success) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(CameraActivity.this, "Cannot auto focus",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override

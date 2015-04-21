@@ -1,6 +1,7 @@
 package info.anodsplace.camtest.camera;
 
 import android.content.Context;
+import android.hardware.Camera;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 
@@ -17,7 +18,7 @@ import java.io.FileOutputStream;
  */
 public class CameraHost extends SimpleCameraHost {
 
-    public interface Listener {
+    public interface Listener extends Camera.AutoFocusCallback{
         void onPreviewStart();
         void onPreviewStop();
         void onImageSave(File photo);
@@ -40,6 +41,10 @@ public class CameraHost extends SimpleCameraHost {
     @Override
     public void autoFocusUnavailable() {
         mListener.onPreviewStop();
+    }
+
+    public void onAutoFocus(boolean success, Camera camera) {
+        mListener.onAutoFocus(success,camera);
     }
 
     @Override

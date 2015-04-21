@@ -47,7 +47,7 @@ public class ProgressInputStream extends InputStream {
     }
 
     private long maybeUpdateDisplay(long progress, long lastUpdate, long size) {
-        if (progress - lastUpdate > FORTY_KILOBYTES) {
+        if (progress - lastUpdate > FORTY_KILOBYTES || progress >= size) {
             lastUpdate = progress;
             progressListener.onProgress(progress, size);
         }
