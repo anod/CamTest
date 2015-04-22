@@ -16,7 +16,7 @@
         android:layout_height="fill_parent"
         android:layout_gravity="right"
         android:padding="8dp"
-        android:background="#cc000000">
+        android:background="#a0000000">
 
         <ImageButton
             android:id="@+id/btn_settings"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
             android:src="@drawable/ic_settings_grey600_36dp"
-            android:background="?attr/actionBarItemBackground"/>
+            style="?android:attr/borderlessButtonStyle" />
 
         <ImageButton
             android:id="@+id/btn_start"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_camera_grey600_48dp"
-            android:background="?attr/actionBarItemBackground"/>
+            style="?android:attr/borderlessButtonStyle" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -93,4 +93,16 @@
         android:padding="8dp"
         android:textColor="@android:color/holo_green_dark"
         android:background="#cc000000"/>
+
+    <ImageView
+        android:id="@+id/autofocus"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+               android:layout_gravity="top|left"
+               android:layout_marginLeft="8dp"
+               android:layout_marginTop="8dp"
+            android:src="@drawable/ic_fullscreen_gray_24dp"
+            />
+
+
+            />
 </FrameLayout>

@@ -21,11 +21,4 @@ public class CameraFragment extends com.commonsware.cwac.camera.CameraFragment{
         setHost(new info.anodsplace.camtest.camera.CameraHost(getActivity(), act.getCameraListener()));
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View cameraView = super.onCreateView(inflater, container, savedInstanceState);
-
-        return cameraView;
-    }
 }

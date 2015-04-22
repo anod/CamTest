@@ -2,12 +2,15 @@ package info.anodsplace.camtest.activites;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,12 +50,18 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
     ImageButton mToggleButton;
     @InjectView(R.id.txt_upload_progress)
     TextView mProgressTextView;
+    @InjectView(R.id.autofocus)
+    ImageView mAutofocusView;
 
     private FtpQueue mFtpQueue;
     private int mUploaded;
     private AutoShutter mShutter;
 
     private CameraFragment mCameraFragment;
+
+    private Drawable mAfGreen;
+    private Drawable mAfRed;
+    private Drawable mAfGrey;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +75,7 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
         Log.e(TAG, "onCreate");
 
         mPicCounterView.setText("0");
-        mUploadedCounterView.setText(mUploaded+"");
+        mUploadedCounterView.setText(mUploaded + "");
 
         mBtnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +84,10 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
             }
         });
 
+        Resources r = getResources();
+        mAfGreen = r.getDrawable(R.drawable.ic_fullscreen_green_24dp);
+        mAfRed = r.getDrawable(R.drawable.ic_fullscreen_red_24dp);
+        mAfGrey = r.getDrawable(R.drawable.ic_fullscreen_gray_24dp);
 
         mProgressTextView.setVisibility(View.GONE);
         mToggleButton.setOnClickListener(new View.OnClickListener() {
@@ -177,20 +190,22 @@ public class CameraActivity extends Activity implements FtpDelivery, AutoShutter
             mCameraFragment = (CameraFragment) getFragmentManager()
                     .findFragmentById(R.id.camera_preview);
         }
+        mAutofocusView.setImageDrawable(mAfGrey);
         mCameraFragment.autoFocus();
     }
 
     @Override
-    public void onAutoFocus(boolean success) {
-        if (!success) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(CameraActivity.this, "Cannot auto focus",
-                            Toast.LENGTH_SHORT).show();
+    public void onAutoFocus(final boolean success) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (success) {
+                    mAutofocusView.setImageDrawable(mAfGreen);
+                } else {
+                    mAutofocusView.setImageDrawable(mAfRed);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
