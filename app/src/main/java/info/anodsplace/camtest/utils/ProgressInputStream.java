@@ -1,5 +1,7 @@
 package info.anodsplace.camtest.utils;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -27,27 +29,34 @@ public class ProgressInputStream extends InputStream {
         super.close();
         if (closed) throw new IOException("already closed");
         closed = true;
+        Log.d("ProgressInputStream", "CLOSE");
     }
 
     @Override
     public int read() throws IOException {
         int read = inputStream.read();
-        if (read > 0)
+        if (read > -1) {
             progress += 1;
-        lastUpdate = maybeUpdateDisplay(progress, lastUpdate, size);
+            lastUpdate = maybeUpdateDisplay(progress, lastUpdate, size);
+        } else {
+            progressListener.onProgress(size, size);
+        }
         return read;
     }
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         int count = inputStream.read(b, off, len);
-        if (count > 0)
+        if (count > -1) {
             progress += count;
-        lastUpdate = maybeUpdateDisplay(progress, lastUpdate, size);
+            lastUpdate = maybeUpdateDisplay(progress, lastUpdate, size);
+        } else {
+            progressListener.onProgress(size, size);
+        }
         return count;
     }
 
     private long maybeUpdateDisplay(long progress, long lastUpdate, long size) {
-        if (progress - lastUpdate > FORTY_KILOBYTES || progress >= size) {
+        if (progress - lastUpdate > FORTY_KILOBYTES) {
             lastUpdate = progress;
             progressListener.onProgress(progress, size);
         }
